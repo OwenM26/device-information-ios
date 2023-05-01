@@ -10,6 +10,8 @@ import Combine
 
 public protocol DeviceService {
     func deviceInformation() -> AnyPublisher<DeviceInformation, Never>
-    func applePencilSupport() -> AnyPublisher<ApplePencilSupport, Never>
-    func supportsWirelessCharging() -> AnyPublisher<Bool, Never>
+    func deviceSupport() -> AnyPublisher<DeviceSupport, Never>
+    func batteryLevel() -> AnyPublisher<Int?, Never>
+    func batteryState() -> AnyPublisher<BatteryState, Never>
+    func batteryLowPowerMode() -> AnyPublisher<BatteryLowPowerMode, Never>
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct DeviceApp: App {
     var body: some Scene {
         WindowGroup {
-            DeviceView()
+            DeviceView(viewModel: DeviceViewModel())
         }
     }
 }

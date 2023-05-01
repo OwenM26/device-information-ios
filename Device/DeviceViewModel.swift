@@ -13,8 +13,10 @@ import Combine
 final class DeviceViewModel: ObservableObject {
     
     @Published private(set) var deviceInformation: DomainLayer.DeviceInformation?
-    @Published private(set) var applePencilSupport = DomainLayer.ApplePencilSupport.none
-    @Published private(set) var supportsWirelessCharging = Support.no
+    @Published private(set) var deviceSupport: DomainLayer.DeviceSupport?
+    @Published private(set) var batteryLevel: String?
+    @Published private(set) var batteryState: DomainLayer.BatteryState?
+    @Published private(set) var batteryLowPowerMode: DomainLayer.BatteryLowPowerMode?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -23,14 +25,21 @@ final class DeviceViewModel: ObservableObject {
     
     init(
         calendar: Calendar = .current,
-        deviceService: DeviceService = DeviceServiceImpl(device: .current, processInformation: .processInfo)
+        deviceService: DeviceService = DeviceServiceImpl(
+            uiDevice: .current,
+            device: .current,
+            processInformation: .processInfo,
+            notificationCenter: .default
+        )
     ) {
         self.calendar = calendar
         self.deviceService = deviceService
         
         fetchDeviceInformation()
-        fetchApplePencilSupport()
-        fetchSupportsWirelessCharging()
+        fetchDeviceSupport()
+        fetchBatteryLevel()
+        fetchBatteryState()
+        fetchBatteryLowPowerMode()
     }
     
     private func fetchDeviceInformation() {
@@ -49,28 +58,78 @@ final class DeviceViewModel: ObservableObject {
                     lastReboot: Date() - $0.uptime
                 )
             }
+            .receive(on: DispatchQueue.main)
             .sink { [unowned self] in
                 deviceInformation = $0
             }
             .store(in: &cancellables)
     }
     
-    private func fetchApplePencilSupport() {
+    private func fetchDeviceSupport() {
         deviceService
-            .applePencilSupport()
-            .map { self.mapToApplePencilSupport($0) }
+            .deviceSupport()
+            .map {
+                DomainLayer.DeviceSupport(
+                    applePencil: self.mapToApplePencilSupport($0.applePencil),
+                    wirelessCharging: self.mapToSupport($0.wirelessCharging),
+                    touchID: self.mapToSupport($0.touchID),
+                    faceID: self.mapToSupport($0.faceID),
+                    display: .init(
+                        zoomed: self.mapToSupport($0.display.zoomed),
+                        diagonal: "\($0.display.diagonal)\"",
+                        roundedCorners: self.mapToSupport($0.display.roundedCorners),
+                        ppi: "\($0.display.ppi) ppi",
+                        has3dTouch: self.mapToSupport($0.display.has3dTouch)
+                    ),
+                    camera: .init(
+                        lidarSensor: self.mapToSupport($0.camera.lidarSensor),
+                        telephoto: self.mapToSupport($0.camera.telephoto),
+                        wide: self.mapToSupport($0.camera.wide),
+                        ultraWide: self.mapToSupport($0.camera.ultraWide),
+                        torch: self.mapToSupport($0.camera.torch)
+                    )
+                )
+            }
+            .receive(on: DispatchQueue.main)
             .sink { [unowned self] in
-                applePencilSupport = $0
+                deviceSupport = $0
             }
             .store(in: &cancellables)
     }
     
-    private func fetchSupportsWirelessCharging() {
+    private func fetchBatteryLevel() {
         deviceService
-            .supportsWirelessCharging()
-            .map { self.mapToSupport($0) }
+            .batteryLevel()
+            .map { "\($0 ?? 0)%" }
+            .receive(on: DispatchQueue.main)
             .sink { [unowned self] in
-                supportsWirelessCharging = $0
+                batteryLevel = $0
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchBatteryState() {
+        deviceService
+            .batteryState()
+            .map {
+                self.mapToBatteryState($0)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] in
+                batteryState = $0
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchBatteryLowPowerMode() {
+        deviceService
+            .batteryLowPowerMode()
+            .map {
+                self.mapToBatteryLowPowerModel($0)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] in
+                batteryLowPowerMode = $0
             }
             .store(in: &cancellables)
     }
@@ -79,14 +138,14 @@ final class DeviceViewModel: ObservableObject {
 
 extension DeviceViewModel {
     
-    private func mapToApplePencilSupport(_ support: DataLayer.ApplePencilSupport) -> DomainLayer.ApplePencilSupport {
+    private func mapToApplePencilSupport(_ support: DataLayer.DeviceSupport.ApplePencilSupport) -> DomainLayer.DeviceSupport.ApplePencilSupport {
         switch support {
         case .firstGen:
-            return DomainLayer.ApplePencilSupport.firstGen
+            return DomainLayer.DeviceSupport.ApplePencilSupport.firstGen
         case .secondGen:
-            return DomainLayer.ApplePencilSupport.secondGen
+            return DomainLayer.DeviceSupport.ApplePencilSupport.secondGen
         case .none:
-            return DomainLayer.ApplePencilSupport.none
+            return DomainLayer.DeviceSupport.ApplePencilSupport.none
         }
     }
     
@@ -111,6 +170,28 @@ extension DeviceViewModel {
         let time = calendar.dateComponents([.day, .hour, .minute, .second], from: date)
         
         return "\(time.day ?? 0)d \(time.hour ?? 0)h \(time.minute ?? 0)m"
+    }
+    
+    private func mapToBatteryState(_ state: DataLayer.BatteryState) -> DomainLayer.BatteryState {
+        switch state {
+        case .full:
+            return .full
+        case .charging:
+            return .charging
+        case .unplugged:
+            return .unplugged
+        case .none:
+            return .unplugged
+        }
+    }
+    
+    private func mapToBatteryLowPowerModel(_ state: DataLayer.BatteryLowPowerMode) -> DomainLayer.BatteryLowPowerMode {
+        switch state {
+        case .on:
+            return .on
+        case .off:
+            return .off
+        }
     }
     
 }
