@@ -17,6 +17,7 @@ final class DeviceViewModel: ObservableObject {
     @Published private(set) var batteryLevel: String?
     @Published private(set) var batteryState: DomainLayer.BatteryState?
     @Published private(set) var batteryLowPowerMode: DomainLayer.BatteryLowPowerMode?
+    @Published private(set) var screenBrightness = ""
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -46,6 +47,7 @@ final class DeviceViewModel: ObservableObject {
         fetchBatteryLevel()
         fetchBatteryState()
         fetchBatteryLowPowerMode()
+        fetchScreenBrightness()
     }
     
     private func fetchDeviceInformation() {
@@ -108,6 +110,14 @@ final class DeviceViewModel: ObservableObject {
                         distance: self.mapToSupport($0.counting.distance),
                         floors: self.mapToSupport($0.counting.floors),
                         cadence: self.mapToSupport($0.counting.cadence)
+                    ),
+                    disk: .init(
+                        totalSpace: $0.disk.totalSpace,
+                        usedSpace: $0.disk.usedSpace,
+                        freeSpace: $0.disk.freeSpace,
+                        totalSpaceRaw: $0.disk.totalSpaceRaw,
+                        usedSpaceRaw: $0.disk.usedSpaceRaw,
+                        freeSpaceRaw: $0.disk.freeSpaceRaw
                     )
                 )
             }
@@ -155,6 +165,19 @@ final class DeviceViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    private func fetchScreenBrightness() {
+        deviceService
+            .screenBrightness()
+            .map {
+                "\($0)%"
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] in
+                screenBrightness = $0
+            }
+            .store(in: &cancellables)
+    }
+    
 }
 
 extension DeviceViewModel {
@@ -188,9 +211,13 @@ extension DeviceViewModel {
     }
     
     private func mapDateToUptime(_ date: Date) -> String {
-        let time = calendar.dateComponents([.day, .hour, .minute, .second], from: date)
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute]
+        formatter.unitsStyle = .abbreviated
+        formatter.zeroFormattingBehavior = .dropLeading
+        formatter.calendar = .autoupdatingCurrent
         
-        return "\(time.day ?? 0)d \(time.hour ?? 0)h \(time.minute ?? 0)m"
+        return formatter.string(from: date, to: Date()) ?? ""
     }
     
     private func mapToBatteryState(_ state: DataLayer.BatteryState) -> DomainLayer.BatteryState {

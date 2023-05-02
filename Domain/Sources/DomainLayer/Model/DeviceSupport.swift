@@ -113,6 +113,37 @@ public struct DeviceSupport {
         }
     }
     
+    public struct Disk {
+        public let totalSpace: String
+        public let usedSpace: String
+        public let freeSpace: String
+        public let totalSpaceRaw: Int64
+        public let usedSpaceRaw: Int64
+        public let freeSpaceRaw: Int64
+        
+        public init(
+            totalSpace: String,
+            usedSpace: String,
+            freeSpace: String,
+            totalSpaceRaw: Int64,
+            usedSpaceRaw: Int64,
+            freeSpaceRaw: Int64
+        ) {
+            self.totalSpace = totalSpace
+            self.usedSpace = usedSpace
+            self.freeSpace = freeSpace
+            self.totalSpaceRaw = totalSpaceRaw
+            self.usedSpaceRaw = usedSpaceRaw
+            self.freeSpaceRaw = freeSpaceRaw
+        }
+        
+        public var percentageUsedFormatted: String {
+            let percentage = abs(Double(totalSpaceRaw - usedSpaceRaw) / Double(usedSpaceRaw)) * 100
+            let rounded = round(percentage * 100) / 100
+            return "\(rounded)% Used"
+        }
+    }
+    
     public let applePencil: ApplePencilSupport
     public let wirelessCharging: Support
     public let touchID: Support
@@ -120,6 +151,7 @@ public struct DeviceSupport {
     public let display: Display
     public let camera: Camera
     public let counting: Counting
+    public let disk: Disk
     
     public init(
         applePencil: ApplePencilSupport,
@@ -128,7 +160,8 @@ public struct DeviceSupport {
         faceID: Support,
         display: Display,
         camera: Camera,
-        counting: Counting
+        counting: Counting,
+        disk: Disk
     ) {
         self.applePencil = applePencil
         self.wirelessCharging = wirelessCharging
@@ -137,5 +170,6 @@ public struct DeviceSupport {
         self.display = display
         self.camera = camera
         self.counting = counting
+        self.disk = disk
     }
 }

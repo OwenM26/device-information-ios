@@ -46,6 +46,15 @@ public struct DeviceSupport {
         public let cadence: Bool
     }
     
+    public struct Disk {
+        public let totalSpace: String
+        public let usedSpace: String
+        public let freeSpace: String
+        public let totalSpaceRaw: Int64
+        public let usedSpaceRaw: Int64
+        public let freeSpaceRaw: Int64
+    }
+    
     public let applePencil: ApplePencilSupport
     public let wirelessCharging: Bool
     public let touchID: Bool
@@ -53,4 +62,5 @@ public struct DeviceSupport {
     public let display: Display
     public let camera: Camera
     public let counting: Counting
+    public let disk: Disk
 }

@@ -14,4 +14,5 @@ public protocol DeviceService {
     func batteryLevel() -> AnyPublisher<Int?, Never>
     func batteryState() -> AnyPublisher<BatteryState, Never>
     func batteryLowPowerMode() -> AnyPublisher<BatteryLowPowerMode, Never>
+    func screenBrightness() -> AnyPublisher<Int, Never>
 }

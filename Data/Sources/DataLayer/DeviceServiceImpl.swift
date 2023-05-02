@@ -17,6 +17,8 @@ public final class DeviceServiceImpl: DeviceService {
     private let batteryLevelPublisher: CurrentValueSubject<Int?, Never>!
     private let batteryStatePublisher: CurrentValueSubject<BatteryState, Never>!
     private let batteryLowPowerModePublisher: CurrentValueSubject<BatteryLowPowerMode, Never>!
+    private let screenBrightnessPublisher: CurrentValueSubject<Int, Never>!
+    private let fileURL = URL(fileURLWithPath: NSHomeDirectory() as String)
     private var cancellables = Set<AnyCancellable>()
     
     private let uiDevice: UIDevice
@@ -46,6 +48,7 @@ public final class DeviceServiceImpl: DeviceService {
         batteryLevelPublisher = CurrentValueSubject(device.batteryLevel)
         batteryStatePublisher = CurrentValueSubject(device.batteryState?.mapToBatteryState ?? .none)
         batteryLowPowerModePublisher = CurrentValueSubject(processInformation.isLowPowerModeEnabled.mapToLowPowerMode)
+        screenBrightnessPublisher = CurrentValueSubject(device.screenBrightness)
         
         notificationCenter
             .publisher(for: UIDevice.batteryLevelDidChangeNotification)
@@ -74,6 +77,13 @@ public final class DeviceServiceImpl: DeviceService {
             }
             .sink { [unowned self] in
                 batteryLowPowerModePublisher.send($0)
+            }
+            .store(in: &cancellables)
+        
+        notificationCenter
+            .publisher(for: UIScreen.brightnessDidChangeNotification)
+            .sink { [unowned self] _ in
+                screenBrightnessPublisher.send(device.screenBrightness)
             }
             .store(in: &cancellables)
     }
@@ -131,6 +141,14 @@ public final class DeviceServiceImpl: DeviceService {
                     distance: CMPedometer.isDistanceAvailable(),
                     floors: CMPedometer.isFloorCountingAvailable(),
                     cadence: CMPedometer.isCadenceAvailable()
+                ),
+                disk: .init(
+                    totalSpace: uiDevice.totalDiskSpaceInGB,
+                    usedSpace: uiDevice.usedDiskSpaceInGB,
+                    freeSpace: uiDevice.freeDiskSpaceInGB,
+                    totalSpaceRaw: uiDevice.totalDiskSpaceInBytes,
+                    usedSpaceRaw: uiDevice.usedDiskSpaceInBytes,
+                    freeSpaceRaw: uiDevice.freeDiskSpaceInBytes
                 )
             )
         )
@@ -149,6 +167,11 @@ public final class DeviceServiceImpl: DeviceService {
     
     public func batteryLowPowerMode() -> AnyPublisher<BatteryLowPowerMode, Never> {
         batteryLowPowerModePublisher
+            .eraseToAnyPublisher()
+    }
+    
+    public func screenBrightness() -> AnyPublisher<Int, Never> {
+        screenBrightnessPublisher
             .eraseToAnyPublisher()
     }
     

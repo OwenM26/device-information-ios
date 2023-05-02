@@ -17,6 +17,7 @@ struct DeviceView: View {
                 deviceDetailsView
                 biometricsView
                 batteryView
+                diskView
                 displayView
                 cameraView
                 motionView
@@ -104,9 +105,30 @@ struct DeviceView: View {
     }
     
     @ViewBuilder
+    var diskView: some View {
+        Section("Storage") {
+            if let deviceInformation = viewModel.deviceSupport {
+                ProgressView(value: Double(deviceInformation.disk.usedSpaceRaw), total: Double(deviceInformation.disk.totalSpaceRaw)) {
+                    HStack {
+                        Text(deviceInformation.disk.percentageUsedFormatted)
+                            .padding(.vertical, 5)
+                    }
+                }
+                .padding(.bottom, 10)
+                
+                LabeledContent("Total Space", value: deviceInformation.disk.totalSpace)
+                LabeledContent("Used Space", value: deviceInformation.disk.usedSpace)
+                LabeledContent("Free Space", value: deviceInformation.disk.freeSpace)
+            }
+        }
+    }
+    
+    
+    @ViewBuilder
     var displayView: some View {
         Section("Display") {
             if let deviceSupport = viewModel.deviceSupport {
+                LabeledContent("Brightness", value: viewModel.screenBrightness)
                 LabeledContent("Diagonal", value: deviceSupport.display.diagonal)
                 LabeledContent("Pixel Density", value: deviceSupport.display.ppi)
                 LabeledContent("Pixel Resolution", value: deviceSupport.display.resolution.formatted)
