@@ -12,13 +12,19 @@ public struct DeviceInformation {
     public struct CPU {
         public let processor: String
         public let architecture: String
+        public let cores: Int
+        public let activeCores: Int
         
         public init(
             processor: String,
-            architecture: String
+            architecture: String,
+            cores: Int,
+            activeCores: Int
         ) {
             self.processor = processor
             self.architecture = architecture
+            self.cores = cores
+            self.activeCores = activeCores
         }
     }
     
@@ -35,6 +41,8 @@ public struct DeviceInformation {
     public let thermalState: ThermalState
     public let uptime: String
     public let lastReboot: Date
+    public let isJailbroken: Support
+    public let multitasking: Support
     
     public init(
         name: String?,
@@ -42,7 +50,9 @@ public struct DeviceInformation {
         cpu: CPU,
         thermalState: ThermalState,
         uptime: String,
-        lastReboot: Date
+        lastReboot: Date,
+        isJailbroken: Support,
+        multitasking: Support
     ) {
         self.name = name
         self.os = os
@@ -50,6 +60,8 @@ public struct DeviceInformation {
         self.thermalState = thermalState
         self.uptime = uptime
         self.lastReboot = lastReboot
+        self.isJailbroken = isJailbroken
+        self.multitasking = multitasking
     }
 }
 

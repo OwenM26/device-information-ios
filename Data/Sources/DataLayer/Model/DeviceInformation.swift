@@ -12,6 +12,8 @@ public struct DeviceInformation {
     public struct CPU {
         public let processor: String
         public let architecture: String
+        public let cores: Int
+        public let activeCores: Int
     }
     
     public enum ThermalState {
@@ -26,4 +28,6 @@ public struct DeviceInformation {
     public let cpu: CPU
     public let thermalState: ThermalState
     public let uptime: TimeInterval
+    public let isJailbroken: Bool
+    public let multitasking: Bool
 }

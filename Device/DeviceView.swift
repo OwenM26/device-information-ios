@@ -12,13 +12,20 @@ struct DeviceView: View {
     @ObservedObject var viewModel: DeviceViewModel
     
     var body: some View {
-        List {
-            deviceDetailsView
-            biometricsView
-            batteryView
-            displayView
-            cameraView
-            peripheralsView
+        NavigationStack {
+            List {
+                deviceDetailsView
+                biometricsView
+                batteryView
+                displayView
+                cameraView
+                motionView
+                peripheralsView
+            }
+            .navigationTitle("My Device")
+            .refreshable {
+                viewModel.fetchData()
+            }
         }
     }
     
@@ -32,6 +39,14 @@ struct DeviceView: View {
             if let deviceInformation = viewModel.deviceInformation {
                 LabeledContent("OS", value: deviceInformation.os)
                 LabeledContent("Temperature", value: deviceInformation.thermalState.localisedString)
+                generateSupportView(
+                    title: "Jailbroken",
+                    systemImageName: deviceInformation.isJailbroken.systemImageName
+                )
+                generateSupportView(
+                    title: "Multitasking",
+                    systemImageName: deviceInformation.multitasking.systemImageName
+                )
                 LabeledContent("Uptime", value: deviceInformation.uptime)
                 LabeledContent("Last Reboot", value: deviceInformation.lastReboot, format: .dateTime)
             }
@@ -41,6 +56,8 @@ struct DeviceView: View {
             if let deviceInformation = viewModel.deviceInformation {
                 LabeledContent("Processor", value: deviceInformation.cpu.processor)
                 LabeledContent("Architecture", value: deviceInformation.cpu.architecture)
+                LabeledContent("Total Cores", value: String(deviceInformation.cpu.cores))
+                LabeledContent("Active Cores", value: String(deviceInformation.cpu.activeCores))
             }
         }
     }
@@ -90,19 +107,19 @@ struct DeviceView: View {
     var displayView: some View {
         Section("Display") {
             if let deviceSupport = viewModel.deviceSupport {
+                LabeledContent("Diagonal", value: deviceSupport.display.diagonal)
+                LabeledContent("Pixel Density", value: deviceSupport.display.ppi)
+                LabeledContent("Pixel Resolution", value: deviceSupport.display.resolution.formatted)
+                
                 generateSupportView(
                     title: "Zoom",
                     systemImageName: deviceSupport.display.zoomed.systemImageName
                 )
                 
-                LabeledContent("Diagonal", value: deviceSupport.display.diagonal)
-                
                 generateSupportView(
                     title: "Rounded Corners",
                     systemImageName: deviceSupport.display.roundedCorners.systemImageName
                 )
-                
-                LabeledContent("Pixel Density", value: deviceSupport.display.ppi)
                 
                 generateSupportView(
                     title: "3D Touch",
@@ -139,6 +156,38 @@ struct DeviceView: View {
                 generateSupportView(
                     title: "Torch",
                     systemImageName: deviceInformation.camera.torch.systemImageName
+                )
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var motionView: some View {
+        Section("Motion") {
+            if let deviceInformation = viewModel.deviceSupport {
+                generateSupportView(
+                    title: "Step Counting",
+                    systemImageName: deviceInformation.counting.steps.systemImageName
+                )
+                
+                generateSupportView(
+                    title: "Cadence Counting",
+                    systemImageName: deviceInformation.counting.cadence.systemImageName
+                )
+                
+                generateSupportView(
+                    title: "Floor Counting",
+                    systemImageName: deviceInformation.counting.floors.systemImageName
+                )
+                
+                generateSupportView(
+                    title: "Pace Monitoring",
+                    systemImageName: deviceInformation.counting.pace.systemImageName
+                )
+                
+                generateSupportView(
+                    title: "Distance Monitoring",
+                    systemImageName: deviceInformation.counting.distance.systemImageName
                 )
             }
         }

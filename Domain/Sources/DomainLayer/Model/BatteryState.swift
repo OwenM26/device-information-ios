@@ -16,7 +16,7 @@ public extension BatteryState {
     var localisedString: String {
         switch self {
         case .full:
-            return "Full"
+            return "Fully Charged"
         case .charging:
             return "Charging"
         case .unplugged:

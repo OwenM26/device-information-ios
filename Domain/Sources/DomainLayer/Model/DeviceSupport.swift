@@ -27,24 +27,45 @@ public struct DeviceSupport {
     }
     
     public struct Display {
+        
+        public struct Resolution {
+            public let x: Int
+            public let y: Int
+            
+            public init(
+                x: Int,
+                y: Int
+            ) {
+                self.x = x
+                self.y = y
+            }
+            
+            public var formatted: String {
+                "\(y) x \(x)"
+            }
+        }
+        
         public let zoomed: Support
         public let diagonal: String
         public let roundedCorners: Support
         public let ppi: String
         public let has3dTouch: Support
+        public let resolution: Resolution
         
         public init(
             zoomed: Support,
             diagonal: String,
             roundedCorners: Support,
             ppi: String,
-            has3dTouch: Support
+            has3dTouch: Support,
+            resolution: Resolution
         ) {
             self.zoomed = zoomed
             self.diagonal = diagonal
             self.roundedCorners = roundedCorners
             self.ppi = ppi
             self.has3dTouch = has3dTouch
+            self.resolution = resolution
         }
     }
     
@@ -70,12 +91,35 @@ public struct DeviceSupport {
         }
     }
     
+    public struct Counting {
+        public let steps: Support
+        public let pace: Support
+        public let distance: Support
+        public let floors: Support
+        public let cadence: Support
+        
+        public init(
+            steps: Support,
+            pace: Support,
+            distance: Support,
+            floors: Support,
+            cadence: Support
+        ) {
+            self.steps = steps
+            self.pace = pace
+            self.distance = distance
+            self.floors = floors
+            self.cadence = cadence
+        }
+    }
+    
     public let applePencil: ApplePencilSupport
     public let wirelessCharging: Support
     public let touchID: Support
     public let faceID: Support
     public let display: Display
     public let camera: Camera
+    public let counting: Counting
     
     public init(
         applePencil: ApplePencilSupport,
@@ -83,7 +127,8 @@ public struct DeviceSupport {
         touchID: Support,
         faceID: Support,
         display: Display,
-        camera: Camera
+        camera: Camera,
+        counting: Counting
     ) {
         self.applePencil = applePencil
         self.wirelessCharging = wirelessCharging
@@ -91,5 +136,6 @@ public struct DeviceSupport {
         self.faceID = faceID
         self.display = display
         self.camera = camera
+        self.counting = counting
     }
 }

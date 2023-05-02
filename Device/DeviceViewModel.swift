@@ -29,12 +29,18 @@ final class DeviceViewModel: ObservableObject {
             uiDevice: .current,
             device: .current,
             processInformation: .processInfo,
-            notificationCenter: .default
+            notificationCenter: .default,
+            application: .shared,
+            screen: .main
         )
     ) {
         self.calendar = calendar
         self.deviceService = deviceService
         
+        fetchData()
+    }
+    
+    func fetchData() {
         fetchDeviceInformation()
         fetchDeviceSupport()
         fetchBatteryLevel()
@@ -51,11 +57,15 @@ final class DeviceViewModel: ObservableObject {
                     os: $0.os,
                     cpu: .init(
                         processor: $0.cpu.processor,
-                        architecture: $0.cpu.architecture.uppercased()
+                        architecture: $0.cpu.architecture.uppercased(),
+                        cores: $0.cpu.cores,
+                        activeCores: $0.cpu.activeCores
                     ),
                     thermalState: self.mapToThermalState($0.thermalState),
-                    uptime: self.mapDateToUptime(Date(timeIntervalSince1970: $0.uptime)),
-                    lastReboot: Date() - $0.uptime
+                    uptime: self.mapDateToUptime(Date(timeIntervalSinceNow: 0 - $0.uptime)),
+                    lastReboot: Date(timeIntervalSinceNow: 0 - $0.uptime),
+                    isJailbroken: self.mapToSupport($0.isJailbroken),
+                    multitasking: self.mapToSupport($0.multitasking)
                 )
             }
             .receive(on: DispatchQueue.main)
@@ -79,7 +89,11 @@ final class DeviceViewModel: ObservableObject {
                         diagonal: "\($0.display.diagonal)\"",
                         roundedCorners: self.mapToSupport($0.display.roundedCorners),
                         ppi: "\($0.display.ppi) ppi",
-                        has3dTouch: self.mapToSupport($0.display.has3dTouch)
+                        has3dTouch: self.mapToSupport($0.display.has3dTouch),
+                        resolution: .init(
+                            x: $0.display.resolution.x,
+                            y: $0.display.resolution.y
+                        )
                     ),
                     camera: .init(
                         lidarSensor: self.mapToSupport($0.camera.lidarSensor),
@@ -87,6 +101,13 @@ final class DeviceViewModel: ObservableObject {
                         wide: self.mapToSupport($0.camera.wide),
                         ultraWide: self.mapToSupport($0.camera.ultraWide),
                         torch: self.mapToSupport($0.camera.torch)
+                    ),
+                    counting: .init(
+                        steps: self.mapToSupport($0.counting.steps),
+                        pace: self.mapToSupport($0.counting.pace),
+                        distance: self.mapToSupport($0.counting.distance),
+                        floors: self.mapToSupport($0.counting.floors),
+                        cadence: self.mapToSupport($0.counting.cadence)
                     )
                 )
             }

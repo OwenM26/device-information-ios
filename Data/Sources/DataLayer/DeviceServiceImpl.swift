@@ -10,6 +10,7 @@ import DeviceKit
 import Combine
 import MachO
 import AVKit
+import CoreMotion
 
 public final class DeviceServiceImpl: DeviceService {
     
@@ -22,17 +23,23 @@ public final class DeviceServiceImpl: DeviceService {
     private let device: Device
     private let processInformation: ProcessInfo
     private let notificationCenter: NotificationCenter
+    private let application: UIApplication
+    private let screen: UIScreen
     
     public init(
         uiDevice: UIDevice,
         device: Device,
         processInformation: ProcessInfo,
-        notificationCenter: NotificationCenter
+        notificationCenter: NotificationCenter,
+        application: UIApplication,
+        screen: UIScreen
     ) {
         self.uiDevice = uiDevice
         self.device = device
         self.processInformation = processInformation
         self.notificationCenter = notificationCenter
+        self.application = application
+        self.screen = screen
         
         uiDevice.isBatteryMonitoringEnabled = true
         
@@ -60,10 +67,10 @@ public final class DeviceServiceImpl: DeviceService {
             }
             .store(in: &cancellables)
         
-        processInformation
-            .publisher(for: \.isLowPowerModeEnabled)
-            .map {
-                $0.mapToLowPowerMode
+        notificationCenter
+            .publisher(for: Notification.Name.NSProcessInfoPowerStateDidChange)
+            .map { _ in
+                processInformation.isLowPowerModeEnabled.mapToLowPowerMode
             }
             .sink { [unowned self] in
                 batteryLowPowerModePublisher.send($0)
@@ -80,10 +87,14 @@ public final class DeviceServiceImpl: DeviceService {
                     .joined(separator: " "),
                 cpu: .init(
                     processor: device.cpu.description,
-                    architecture: cpuArchitecture
+                    architecture: cpuArchitecture,
+                    cores: processInformation.processorCount,
+                    activeCores: processInformation.activeProcessorCount
                 ),
                 thermalState: mapToThermalState(device.thermalState),
-                uptime: processInformation.systemUptime
+                uptime: processInformation.systemUptime,
+                isJailbroken: application.canOpenURL(URL(string: "cydia://")!),
+                multitasking: uiDevice.isMultitaskingSupported
             )
         )
         .eraseToAnyPublisher()
@@ -101,7 +112,11 @@ public final class DeviceServiceImpl: DeviceService {
                     diagonal: device.diagonal,
                     roundedCorners: device.hasRoundedDisplayCorners,
                     ppi: device.ppi ?? 0,
-                    has3dTouch: device.has3dTouchSupport
+                    has3dTouch: device.has3dTouchSupport,
+                    resolution: .init(
+                        x: Int(screen.bounds.size.width * screen.scale),
+                        y: Int(screen.bounds.size.height * screen.scale)
+                    )
                 ),
                 camera: .init(
                     lidarSensor: device.hasLidarSensor,
@@ -109,6 +124,13 @@ public final class DeviceServiceImpl: DeviceService {
                     wide: device.hasWideCamera,
                     ultraWide: device.hasUltraWideCamera,
                     torch: AVCaptureDevice.default(for: .video)?.hasTorch ?? false
+                ),
+                counting: .init(
+                    steps: CMPedometer.isStepCountingAvailable(),
+                    pace: CMPedometer.isPaceAvailable(),
+                    distance: CMPedometer.isDistanceAvailable(),
+                    floors: CMPedometer.isFloorCountingAvailable(),
+                    cadence: CMPedometer.isCadenceAvailable()
                 )
             )
         )
