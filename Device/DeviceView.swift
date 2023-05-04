@@ -48,8 +48,8 @@ struct DeviceView: View {
                     title: "Multitasking",
                     systemImageName: deviceInformation.multitasking.systemImageName
                 )
-                LabeledContent("Uptime", value: deviceInformation.uptime)
-                LabeledContent("Last Reboot", value: deviceInformation.lastReboot, format: .dateTime)
+//                LabeledContent("Uptime", value: deviceInformation.uptime)
+//                LabeledContent("Last Reboot", value: deviceInformation.lastReboot, format: .dateTime)
             }
         }
         
