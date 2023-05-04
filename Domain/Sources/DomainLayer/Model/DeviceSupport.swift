@@ -138,8 +138,8 @@ public struct DeviceSupport {
         }
         
         public var percentageUsedFormatted: String {
-            let percentage = abs(Double(totalSpaceRaw - usedSpaceRaw) / Double(usedSpaceRaw)) * 100
-            let rounded = round(percentage * 100) / 100
+            let percentage = (Double(totalSpaceRaw) - Double(usedSpaceRaw)) / Double(totalSpaceRaw) * 100
+            let rounded = 100 - (round(percentage * 100) / 100)
             return "\(rounded)% Used"
         }
     }
