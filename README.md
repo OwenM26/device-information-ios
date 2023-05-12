@@ -35,9 +35,9 @@ An app that pulls as much information about the device as possible! Checkout bel
 
 ## Contribute
 
-Please feel free to contribute to **Device Information**, check the ``LICENSE`` file for more info.
+Please feel free to contribute to **Device Information App Project**, check the ``LICENSE`` file for more info.
 
-## Meta
+## Support Me
 
 Owen Moore - 🧑‍💻 [LinkedIn](https://www.linkedin.com/in/owen-moore-610612163/) - 💻 [GitHub](https://github.com/OwenM26)
 
