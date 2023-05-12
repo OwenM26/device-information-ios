@@ -64,8 +64,6 @@ final class DeviceViewModel: ObservableObject {
                         activeCores: $0.cpu.activeCores
                     ),
                     thermalState: self.mapToThermalState($0.thermalState),
-                    uptime: self.mapDateToUptime(Date(timeIntervalSinceNow: 0 - $0.uptime)),
-                    lastReboot: Date(timeIntervalSinceNow: 0 - $0.uptime),
                     isJailbroken: self.mapToSupport($0.isJailbroken),
                     multitasking: self.mapToSupport($0.multitasking)
                 )

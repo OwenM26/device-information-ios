@@ -27,7 +27,6 @@ public struct DeviceInformation {
     public let os: String
     public let cpu: CPU
     public let thermalState: ThermalState
-    public let uptime: TimeInterval
     public let isJailbroken: Bool
     public let multitasking: Bool
 }

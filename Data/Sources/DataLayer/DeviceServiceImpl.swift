@@ -48,7 +48,7 @@ public final class DeviceServiceImpl: DeviceService {
         batteryLevelPublisher = CurrentValueSubject(device.batteryLevel)
         batteryStatePublisher = CurrentValueSubject(device.batteryState?.mapToBatteryState ?? .none)
         batteryLowPowerModePublisher = CurrentValueSubject(processInformation.isLowPowerModeEnabled.mapToLowPowerMode)
-        screenBrightnessPublisher = CurrentValueSubject(device.screenBrightness)
+        screenBrightnessPublisher = CurrentValueSubject(screen.screenBrightness)
         
         notificationCenter
             .publisher(for: UIDevice.batteryLevelDidChangeNotification)
@@ -82,8 +82,11 @@ public final class DeviceServiceImpl: DeviceService {
         
         notificationCenter
             .publisher(for: UIScreen.brightnessDidChangeNotification)
-            .sink { [unowned self] _ in
-                screenBrightnessPublisher.send(device.screenBrightness)
+            .map { _ in
+                screen.screenBrightness
+            }
+            .sink { [unowned self] in
+                screenBrightnessPublisher.send($0)
             }
             .store(in: &cancellables)
     }
@@ -102,7 +105,6 @@ public final class DeviceServiceImpl: DeviceService {
                     activeCores: processInformation.activeProcessorCount
                 ),
                 thermalState: mapToThermalState(device.thermalState),
-                uptime: processInformation.systemUptime,
                 isJailbroken: application.canOpenURL(URL(string: "cydia://")!),
                 multitasking: uiDevice.isMultitaskingSupported
             )
@@ -233,6 +235,14 @@ extension Device.BatteryState {
         case .unplugged:
             return .unplugged
         }
+    }
+    
+}
+
+extension UIScreen {
+    
+    fileprivate var screenBrightness: Int {
+        Int(brightness * 100)
     }
     
 }

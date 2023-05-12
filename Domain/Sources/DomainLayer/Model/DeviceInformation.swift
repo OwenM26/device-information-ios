@@ -39,8 +39,6 @@ public struct DeviceInformation {
     public let os: String
     public let cpu: CPU
     public let thermalState: ThermalState
-    public let uptime: String
-    public let lastReboot: Date
     public let isJailbroken: Support
     public let multitasking: Support
     
@@ -49,8 +47,6 @@ public struct DeviceInformation {
         os: String,
         cpu: CPU,
         thermalState: ThermalState,
-        uptime: String,
-        lastReboot: Date,
         isJailbroken: Support,
         multitasking: Support
     ) {
@@ -58,8 +54,6 @@ public struct DeviceInformation {
         self.os = os
         self.cpu = cpu
         self.thermalState = thermalState
-        self.uptime = uptime
-        self.lastReboot = lastReboot
         self.isJailbroken = isJailbroken
         self.multitasking = multitasking
     }

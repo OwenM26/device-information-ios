@@ -18,15 +18,15 @@ extension UIDevice {
     }
 
     var totalDiskSpaceInGB: String {
-       ByteCountFormatter.string(fromByteCount: totalDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.decimal)
+       ByteCountFormatter.string(fromByteCount: totalDiskSpaceInBytes, countStyle: .decimal)
     }
     
     var freeDiskSpaceInGB: String {
-        ByteCountFormatter.string(fromByteCount: freeDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.decimal)
+        ByteCountFormatter.string(fromByteCount: freeDiskSpaceInBytes, countStyle: .decimal)
     }
     
     var usedDiskSpaceInGB: String {
-        ByteCountFormatter.string(fromByteCount: usedDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.decimal)
+        ByteCountFormatter.string(fromByteCount: usedDiskSpaceInBytes, countStyle: .decimal)
     }
     
     var totalDiskSpaceInMB: String {
@@ -42,8 +42,12 @@ extension UIDevice {
     }
     
     var totalDiskSpaceInBytes: Int64 {
-        guard let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String),
-            let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.int64Value else { return 0 }
+        guard
+            let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String),
+            let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.int64Value
+        else {
+            return 0
+        }
         return space
     }
     
