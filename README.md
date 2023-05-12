@@ -40,9 +40,9 @@ Owen Moore - 🧑‍💻 [LinkedIn](https://www.linkedin.com/in/owen-moore-61061
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://bmc.link/OwenM99)
 
-Distributed under the MIT license. See ``LICENSE`` for more information.
+Distributed under the MIT license. See ``License`` for more information.
 
 [swift-image]: https://img.shields.io/badge/swift-5.8-orange.svg
 [swift-url]: https://swift.org/
 [license-image]: https://img.shields.io/badge/License-MIT-blue.svg
-[license-url]: LICENSE
+[license-url]: https://github.com/OwenM26/device-information/blob/master/License.md
