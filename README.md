@@ -7,7 +7,7 @@
 # Device Information App
 
 An app that pulls as much information about the device as possible! Checkout below for a full list of features! Feel free to PR into the project, fork it and I look forward to seeing what you build with it!
-<img src="https://github.com/OwenM26/device-information/assets/67434489/97868d50-d326-4e47-81cd-4763d6c51bba" width="250" height="550">
+<img src="https://github.com/OwenM26/device-information/assets/67434489/a29a3eec-7a94-41fe-acbd-02c844966d30" width="250" height="550">
 
 ## Features
 
