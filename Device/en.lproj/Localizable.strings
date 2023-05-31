@@ -1,0 +1,81 @@
+/* 
+  Localizable.strings
+  Device
+
+  Created by Owen Moore on 31/05/2023.
+  
+*/
+
+device.navigation.title = "My Device";
+
+// Device
+
+device.section.device = "Device";
+device.section.device.modelName = "Model Name";
+device.section.device.os = "OS";
+device.section.device.temperature = "Temperature";
+device.section.device.jailbroken = "Jailbroken";
+device.section.device.multitasking = "Multitasking";
+
+// CPU
+
+device.section.cpu = "CPU";
+device.section.cpu.processor = "Processor";
+device.section.cpu.architecture = "Architecture";
+device.section.cpu.totalCores = "Total Cores";
+device.section.cpu.activeCores = "Active Cores";
+
+// Biometrics
+
+device.section.biometrics = "Biometrics";
+device.section.biometrics.touchID = "TouchID";
+device.section.biometrics.faceID = "FaceID";
+
+// Battery
+
+device.section.battery = "Battery";
+device.section.battery.level = "Level";
+device.section.battery.state = "State";
+device.section.battery.lowPowerMode = "Low Power Mode";
+device.section.battery.wirelessCharging = "Wireless Charging";
+
+// Storage
+
+device.section.storage = "Storage";
+device.section.storage.totalSpace = "Total Space";
+device.section.storage.usedSpace = "Used Space";
+device.section.storage.freeSpace = "Free Space";
+
+// Display
+
+device.section.display = "Display";
+device.section.display.brightness = "Brightness";
+device.section.display.diagonal = "Diagonal";
+device.section.display.pixelDensity = "Pixel Density";
+device.section.display.pixelResolution = "Pixel Resolution";
+device.section.display.zoom = "Zoom";
+device.section.display.roundedCorners = "Rounded Corners";
+device.section.display.forceTouch = "3D Touch";
+
+// Camera
+
+device.section.camera = "Camera";
+device.section.camera.telephotoSensor = "Telephoto Sensor";
+device.section.camera.lidarSensor = "LiDAR Sensor";
+device.section.camera.wideSensor = "Wide Sensor";
+device.section.camera.ultraWideSensor = "Ultra Wide Sensor";
+device.section.camera.torch = "Torch";
+
+// Motion
+
+device.section.motion = "Motion";
+device.section.motion.stepCounting = "Step Counting";
+device.section.motion.cadenceCounting = "Cadence Counting";
+device.section.motion.floorCounting = "Floor Counting";
+device.section.motion.paceMonitoring = "Pace Monitoring";
+device.section.motion.distanceMonitoring = "Distance Monitoring";
+
+// Peripherals
+
+device.section.peripherals = "Peripherals";
+device.section.peripherals.applePencil = "Apple Pencil";

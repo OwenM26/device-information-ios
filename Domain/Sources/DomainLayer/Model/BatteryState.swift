@@ -16,11 +16,11 @@ public extension BatteryState {
     var localisedString: String {
         switch self {
         case .full:
-            return "Fully Charged"
+            return NSLocalizedString("batteryState.full", bundle: .module, comment: "")
         case .charging:
-            return "Charging"
+            return NSLocalizedString("batteryState.charging", bundle: .module, comment: "")
         case .unplugged:
-            return "Discharging"
+            return NSLocalizedString("batteryState.unplugged", bundle: .module, comment: "")
         }
     }
     

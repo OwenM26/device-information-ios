@@ -23,7 +23,7 @@ struct DeviceView: View {
                 motionView
                 peripheralsView
             }
-            .navigationTitle("My Device")
+            .navigationTitle("device.navigation.title")
             .refreshable {
                 viewModel.fetchData()
             }
@@ -32,46 +32,46 @@ struct DeviceView: View {
     
     @ViewBuilder
     var deviceDetailsView: some View {
-        Section("Device") {
+        Section("device.section.device") {
             if let modelName = viewModel.deviceInformation?.name {
-                LabeledContent("Model Name", value: modelName)
+                LabeledContent("device.section.device.modelName", value: modelName)
             }
             
             if let deviceInformation = viewModel.deviceInformation {
-                LabeledContent("OS", value: deviceInformation.os)
-                LabeledContent("Temperature", value: deviceInformation.thermalState.localisedString)
+                LabeledContent("device.section.device.os", value: deviceInformation.os)
+                LabeledContent("device.section.device.temperature", value: deviceInformation.thermalState.localisedString)
                 generateSupportView(
-                    title: "Jailbroken",
+                    localisedStringKey: "device.section.device.jailbroken",
                     systemImageName: deviceInformation.isJailbroken.systemImageName
                 )
                 generateSupportView(
-                    title: "Multitasking",
+                    localisedStringKey: "device.section.device.multitasking",
                     systemImageName: deviceInformation.multitasking.systemImageName
                 )
             }
         }
         
-        Section("CPU") {
+        Section("device.section.cpu") {
             if let deviceInformation = viewModel.deviceInformation {
-                LabeledContent("Processor", value: deviceInformation.cpu.processor)
-                LabeledContent("Architecture", value: deviceInformation.cpu.architecture)
-                LabeledContent("Total Cores", value: String(deviceInformation.cpu.cores))
-                LabeledContent("Active Cores", value: String(deviceInformation.cpu.activeCores))
+                LabeledContent("device.section.cpu.processor", value: deviceInformation.cpu.processor)
+                LabeledContent("device.section.cpu.architecture", value: deviceInformation.cpu.architecture)
+                LabeledContent("device.section.cpu.totalCores", value: String(deviceInformation.cpu.cores))
+                LabeledContent("device.section.cpu.activeCores", value: String(deviceInformation.cpu.activeCores))
             }
         }
     }
     
     @ViewBuilder
     var biometricsView: some View {
-        Section("Biometrics") {
+        Section("device.section.biometrics") {
             if let deviceInformation = viewModel.deviceSupport {
                 generateSupportView(
-                    title: "Touch ID",
+                    localisedStringKey: "device.section.biometrics.touchID",
                     systemImageName: deviceInformation.touchID.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Face ID",
+                    localisedStringKey: "device.section.biometrics.faceID",
                     systemImageName: deviceInformation.faceID.systemImageName
                 )
             }
@@ -80,22 +80,22 @@ struct DeviceView: View {
     
     @ViewBuilder
     var batteryView: some View {
-        Section("Battery") {
+        Section("device.section.battery") {
             if let batteryLevel = viewModel.batteryLevel {
-                LabeledContent("Level", value: batteryLevel)
+                LabeledContent("device.section.battery.level", value: batteryLevel)
             }
             
             if let batteryState = viewModel.batteryState {
-                LabeledContent("State", value: batteryState.localisedString)
+                LabeledContent("device.section.battery.state", value: batteryState.localisedString)
             }
             
             if let lowPowerMode = viewModel.batteryLowPowerMode {
-                LabeledContent("Low Power Mode", value: lowPowerMode.localisedString)
+                LabeledContent("device.section.battery.lowPowerMode", value: lowPowerMode.localisedString)
             }
             
             if let deviceSupport = viewModel.deviceSupport {
                 generateSupportView(
-                    title: "Wireless Charging",
+                    localisedStringKey: "device.section.battery.wirelessCharging",
                     systemImageName: deviceSupport.wirelessCharging.systemImageName
                 )
             }
@@ -104,7 +104,7 @@ struct DeviceView: View {
     
     @ViewBuilder
     var diskView: some View {
-        Section("Storage") {
+        Section("device.section.storage") {
             if let deviceInformation = viewModel.deviceSupport {
                 ProgressView(value: Double(deviceInformation.disk.usedSpaceRaw), total: Double(deviceInformation.disk.totalSpaceRaw)) {
                     HStack {
@@ -114,35 +114,34 @@ struct DeviceView: View {
                 }
                 .padding(.bottom, 10)
                 
-                LabeledContent("Total Space", value: deviceInformation.disk.totalSpace)
-                LabeledContent("Used Space", value: deviceInformation.disk.usedSpace)
-                LabeledContent("Free Space", value: deviceInformation.disk.freeSpace)
+                LabeledContent("device.section.storage.totalSpace", value: deviceInformation.disk.totalSpace)
+                LabeledContent("device.section.storage.usedSpace", value: deviceInformation.disk.usedSpace)
+                LabeledContent("device.section.storage.freeSpace", value: deviceInformation.disk.freeSpace)
             }
         }
     }
     
-    
     @ViewBuilder
     var displayView: some View {
-        Section("Display") {
+        Section("device.section.display") {
             if let deviceSupport = viewModel.deviceSupport {
-                LabeledContent("Brightness", value: viewModel.screenBrightness)
-                LabeledContent("Diagonal", value: deviceSupport.display.diagonal)
-                LabeledContent("Pixel Density", value: deviceSupport.display.ppi)
-                LabeledContent("Pixel Resolution", value: deviceSupport.display.resolution.formatted)
+                LabeledContent("device.section.display.brightness", value: viewModel.screenBrightness)
+                LabeledContent("device.section.display.diagonal", value: deviceSupport.display.diagonal)
+                LabeledContent("device.section.display.pixelDensity", value: deviceSupport.display.ppi)
+                LabeledContent("device.section.display.pixelResolution", value: deviceSupport.display.resolution.formatted)
                 
                 generateSupportView(
-                    title: "Zoom",
+                    localisedStringKey: "device.section.display.zoom",
                     systemImageName: deviceSupport.display.zoomed.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Rounded Corners",
+                    localisedStringKey: "device.section.display.roundedCorners",
                     systemImageName: deviceSupport.display.roundedCorners.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "3D Touch",
+                    localisedStringKey: "device.section.display.forceTouch",
                     systemImageName: deviceSupport.display.has3dTouch.systemImageName
                 )
             }
@@ -151,30 +150,30 @@ struct DeviceView: View {
     
     @ViewBuilder
     var cameraView: some View {
-        Section("Camera") {
+        Section("device.section.camera") {
             if let deviceInformation = viewModel.deviceSupport {
                 generateSupportView(
-                    title: "Telephoto Sensor",
+                    localisedStringKey: "device.section.camera.telephotoSensor",
                     systemImageName: deviceInformation.camera.telephoto.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Lidar Sensor",
+                    localisedStringKey: "device.section.camera.lidarSensor",
                     systemImageName: deviceInformation.camera.lidarSensor.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Wide Sensor",
+                    localisedStringKey: "device.section.camera.wideSensor",
                     systemImageName: deviceInformation.camera.wide.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "UltraWide Sensor",
+                    localisedStringKey: "device.section.camera.ultraWideSensor",
                     systemImageName: deviceInformation.camera.ultraWide.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Torch",
+                    localisedStringKey: "device.section.camera.torch",
                     systemImageName: deviceInformation.camera.torch.systemImageName
                 )
             }
@@ -183,30 +182,30 @@ struct DeviceView: View {
     
     @ViewBuilder
     var motionView: some View {
-        Section("Motion") {
+        Section("device.section.motion") {
             if let deviceInformation = viewModel.deviceSupport {
                 generateSupportView(
-                    title: "Step Counting",
+                    localisedStringKey: "device.section.motion.stepCounting",
                     systemImageName: deviceInformation.counting.steps.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Cadence Counting",
+                    localisedStringKey: "device.section.motion.cadenceCounting",
                     systemImageName: deviceInformation.counting.cadence.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Floor Counting",
+                    localisedStringKey: "device.section.motion.floorCounting",
                     systemImageName: deviceInformation.counting.floors.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Pace Monitoring",
+                    localisedStringKey: "device.section.motion.paceMonitoring",
                     systemImageName: deviceInformation.counting.pace.systemImageName
                 )
                 
                 generateSupportView(
-                    title: "Distance Monitoring",
+                    localisedStringKey: "device.section.motion.distanceMonitoring",
                     systemImageName: deviceInformation.counting.distance.systemImageName
                 )
             }
@@ -215,20 +214,20 @@ struct DeviceView: View {
     
     @ViewBuilder
     var peripheralsView: some View {
-        Section("Peripherals") {
+        Section("device.section.peripherals") {
             if let deviceInformation = viewModel.deviceSupport {
-                LabeledContent("Apple Pencil", value: deviceInformation.applePencil.localisedTitle)
+                LabeledContent("device.section.peripherals.applePencil", value: deviceInformation.applePencil.localisedTitle)
             }
         }
     }
     
     @ViewBuilder
     private func generateSupportView(
-        title: String,
+        localisedStringKey: String,
         systemImageName: String
     ) -> some View {
         HStack {
-            Text(title)
+            Text(LocalizedStringKey(localisedStringKey))
             Spacer()
             Image(systemName: systemImageName)
         }
