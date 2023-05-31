@@ -10,14 +10,19 @@ import Foundation
 public struct DeviceInformation {
     
     public struct CPU {
+        
+        public enum Architecture {
+            case arm64, arm, unknown
+        }
+        
         public let processor: String
-        public let architecture: String
+        public let architecture: Architecture
         public let cores: Int
         public let activeCores: Int
         
         public init(
             processor: String,
-            architecture: String,
+            architecture: Architecture,
             cores: Int,
             activeCores: Int
         ) {
@@ -57,6 +62,21 @@ public struct DeviceInformation {
         self.isJailbroken = isJailbroken
         self.multitasking = multitasking
     }
+}
+
+public extension DeviceInformation.CPU.Architecture {
+    
+    var localisedString: String {
+        switch self {
+        case .arm64:
+            return NSLocalizedString("cpu.architecture.arm64", bundle: .module, comment: "")
+        case .arm:
+            return NSLocalizedString("cpu.architecture.arm", bundle: .module, comment: "")
+        case .unknown:
+            return NSLocalizedString("cpu.architecture.unknown", bundle: .module, comment: "")
+        }
+    }
+    
 }
 
 public extension DeviceInformation.ThermalState {

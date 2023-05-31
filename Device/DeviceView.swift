@@ -54,7 +54,7 @@ struct DeviceView: View {
         Section("device.section.cpu") {
             if let deviceInformation = viewModel.deviceInformation {
                 LabeledContent("device.section.cpu.processor", value: deviceInformation.cpu.processor)
-                LabeledContent("device.section.cpu.architecture", value: deviceInformation.cpu.architecture)
+                LabeledContent("device.section.cpu.architecture", value: deviceInformation.cpu.architecture.localisedString)
                 LabeledContent("device.section.cpu.totalCores", value: String(deviceInformation.cpu.cores))
                 LabeledContent("device.section.cpu.activeCores", value: String(deviceInformation.cpu.activeCores))
             }
