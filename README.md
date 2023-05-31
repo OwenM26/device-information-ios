@@ -28,11 +28,10 @@ An app that pulls as much information about the device as possible! Checkout bel
 - iOS 16.2+
 - Xcode 14.2
 
-## Running
+## Getting Started!
 
-#### In Xcode
 1. Clone the [project](https://github.com/OwenM26/device-information) to your machine
-2. Open the project and wait for SPM to resolve packages
+2. Open the project via Xcode and wait for SPM to resolve packages
 3. Run! 🚀
 
 ## Contribute
