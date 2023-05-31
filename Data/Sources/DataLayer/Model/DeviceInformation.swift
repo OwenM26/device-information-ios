@@ -10,8 +10,13 @@ import Foundation
 public struct DeviceInformation {
     
     public struct CPU {
+        
+        public enum Architecture {
+            case arm64, arm, unknown
+        }
+        
         public let processor: String
-        public let architecture: String
+        public let architecture: Architecture
         public let cores: Int
         public let activeCores: Int
     }

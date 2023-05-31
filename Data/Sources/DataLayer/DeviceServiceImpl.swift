@@ -192,11 +192,16 @@ extension DeviceServiceImpl {
         }
     }
     
-    private var cpuArchitecture: String {
-        guard let archRaw = NXGetLocalArchInfo().pointee.name else {
-            return ""
-        }
-        return String(cString: archRaw)
+    private var cpuArchitecture: DeviceInformation.CPU.Architecture {
+        #if os(iOS)
+            #if arch(arm64)
+                return .arm64
+            #elseif arch(arm) || arch(arm64_32)
+                return .arm
+            #endif
+        #else
+            return .unknown
+        #endif
     }
     
     private func mapToThermalState(_ state: Device.ThermalState?) -> DeviceInformation.ThermalState {

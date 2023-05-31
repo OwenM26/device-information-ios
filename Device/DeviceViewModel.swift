@@ -59,7 +59,7 @@ final class DeviceViewModel: ObservableObject {
                     os: $0.os,
                     cpu: .init(
                         processor: $0.cpu.processor,
-                        architecture: $0.cpu.architecture.uppercased(),
+                        architecture: self.mapToCPUArchitecture($0.cpu.architecture),
                         cores: $0.cpu.cores,
                         activeCores: $0.cpu.activeCores
                     ),
@@ -179,6 +179,17 @@ final class DeviceViewModel: ObservableObject {
 }
 
 extension DeviceViewModel {
+    
+    private func mapToCPUArchitecture(_ architecture: DataLayer.DeviceInformation.CPU.Architecture) -> DomainLayer.DeviceInformation.CPU.Architecture {
+        switch architecture {
+        case .arm64:
+            return .arm64
+        case .arm:
+            return .arm
+        case .unknown:
+            return .unknown
+        }
+    }
     
     private func mapToApplePencilSupport(_ support: DataLayer.DeviceSupport.ApplePencilSupport) -> DomainLayer.DeviceSupport.ApplePencilSupport {
         switch support {

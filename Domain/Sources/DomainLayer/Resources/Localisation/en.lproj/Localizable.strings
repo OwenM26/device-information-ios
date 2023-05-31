@@ -6,6 +6,10 @@
   
 */
 
+cpu.architecture.arm64 = "ARM64";
+cpu.architecture.arm = "ARM";
+cpu.architecture.unknown = "Unknown";
+
 enabled = "Enabled";
 disabled = "Disabled";
 
