@@ -17,11 +17,11 @@ public struct DeviceSupport {
         public var localisedTitle: String {
             switch self {
             case .firstGen:
-                return "First Generation Supported"
+                return NSLocalizedString("peripheral.applepencil.firstGeneration", bundle: .module, comment: "")
             case .secondGen:
-                return "First Generation Supported"
+                return NSLocalizedString("peripheral.applepencil.secondGeneration", bundle: .module, comment: "")
             case .none:
-                return "Not Supported"
+                return NSLocalizedString("peripheral.applepencil.notSupported", bundle: .module, comment: "")
             }
         }
     }
@@ -140,7 +140,9 @@ public struct DeviceSupport {
         public var percentageUsedFormatted: String {
             let percentage = (Double(totalSpaceRaw) - Double(usedSpaceRaw)) / Double(totalSpaceRaw) * 100
             let rounded = 100 - (round(percentage * 100) / 100)
-            return "\(rounded)% Used"
+            
+            let localisedString = NSLocalizedString("disk.spacedUsed", bundle: .module, comment: "")
+            return String.localizedStringWithFormat(localisedString, "\(rounded)")
         }
     }
     

@@ -16,9 +16,9 @@ public extension BatteryLowPowerMode {
     var localisedString: String {
         switch self {
         case .on:
-            return "Enabled"
+            return NSLocalizedString("enabled", bundle: .module, comment: "")
         case .off:
-            return "Disabled"
+            return NSLocalizedString("disabled", bundle: .module, comment: "")
         }
     }
     

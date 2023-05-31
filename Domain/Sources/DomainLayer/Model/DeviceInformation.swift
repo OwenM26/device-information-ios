@@ -64,13 +64,13 @@ public extension DeviceInformation.ThermalState {
     var localisedString: String {
         switch self {
         case .normal:
-            return "Normal"
+            return NSLocalizedString("thermalState.normal", bundle: .module, comment: "")
         case .fair:
-            return "Fair"
+            return NSLocalizedString("thermalState.fair", bundle: .module, comment: "")
         case .serious:
-            return "Serious"
+            return NSLocalizedString("thermalState.serious", bundle: .module, comment: "")
         case .critical:
-            return "Critical"
+            return NSLocalizedString("thermalState.critical", bundle: .module, comment: "")
         }
     }
     

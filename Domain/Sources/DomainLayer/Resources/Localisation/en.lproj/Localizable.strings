@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  
+
+  Created by Owen Moore on 31/05/2023.
+  
+*/
+
+enabled = "Enabled";
+disabled = "Disabled";
+
+batteryState.full = "Fully Charged";
+batteryState.charging = "Charging";
+batteryState.unplugged = "Discharging";
+
+thermalState.normal = "Normal";
+thermalState.fair = "Fair";
+thermalState.serious = "Serious";
+thermalState.critical = "Critical";
+
+disk.spacedUsed = "%@%% Used";
+
+peripheral.applepencil.firstGeneration = "First Generation Supported";
+peripheral.applepencil.secondGeneration = "Second Generation Supported";
+peripheral.applepencil.notSupported = "Not Supported";
