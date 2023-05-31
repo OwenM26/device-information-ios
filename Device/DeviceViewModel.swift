@@ -208,16 +208,6 @@ extension DeviceViewModel {
         return value ? .yes : .no
     }
     
-    private func mapDateToUptime(_ date: Date) -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.day, .hour, .minute]
-        formatter.unitsStyle = .abbreviated
-        formatter.zeroFormattingBehavior = .dropLeading
-        formatter.calendar = .autoupdatingCurrent
-        
-        return formatter.string(from: date, to: Date()) ?? ""
-    }
-    
     private func mapToBatteryState(_ state: DataLayer.BatteryState) -> DomainLayer.BatteryState {
         switch state {
         case .full:
