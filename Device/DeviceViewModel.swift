@@ -183,11 +183,11 @@ extension DeviceViewModel {
     private func mapToApplePencilSupport(_ support: DataLayer.DeviceSupport.ApplePencilSupport) -> DomainLayer.DeviceSupport.ApplePencilSupport {
         switch support {
         case .firstGen:
-            return DomainLayer.DeviceSupport.ApplePencilSupport.firstGen
+            return .firstGen
         case .secondGen:
-            return DomainLayer.DeviceSupport.ApplePencilSupport.secondGen
+            return .secondGen
         case .none:
-            return DomainLayer.DeviceSupport.ApplePencilSupport.none
+            return .none
         }
     }
     
