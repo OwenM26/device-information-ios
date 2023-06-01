@@ -21,7 +21,7 @@ An app that pulls as much information about the device as possible! Checkout bel
 - [x] Motion Information
 - [x] Peripherals Information
 - [x] 🗺️ Localisation Ready
-- [ ] 🔨 Unit Tests (Coming Soon)
+- [ ] 🔨 Unit Tests (In Progress)
 
 ## Requirements
 
