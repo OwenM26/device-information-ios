@@ -27,12 +27,8 @@ final class DeviceViewModel: ObservableObject {
     init(
         calendar: Calendar = .current,
         deviceService: DeviceService = DeviceServiceImpl(
-            uiDevice: .current,
-            device: .current,
             processInformation: .processInfo,
-            notificationCenter: .default,
-            application: .shared,
-            screen: .main
+            application: .shared
         )
     ) {
         self.calendar = calendar

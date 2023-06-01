@@ -22,19 +22,19 @@ public final class DeviceServiceImpl: DeviceService {
     private var cancellables = Set<AnyCancellable>()
     
     private let uiDevice: UIDevice
-    private let device: Device
+    private let device: MyDevice
     private let processInformation: ProcessInfo
-    private let notificationCenter: NotificationCenter
+    private let notificationCenter: DeviceNotificationCenter
     private let application: UIApplication
-    private let screen: UIScreen
+    private let screen: MyScreen
     
     public init(
-        uiDevice: UIDevice,
-        device: Device,
+        uiDevice: UIDevice = .current,
+        device: MyDevice = Device.current,
         processInformation: ProcessInfo,
-        notificationCenter: NotificationCenter,
+        notificationCenter: DeviceNotificationCenter = NotificationCenter.default,
         application: UIApplication,
-        screen: UIScreen
+        screen: MyScreen = UIScreen.main
     ) {
         self.uiDevice = uiDevice
         self.device = device
@@ -51,7 +51,7 @@ public final class DeviceServiceImpl: DeviceService {
         screenBrightnessPublisher = CurrentValueSubject(screen.screenBrightness)
         
         notificationCenter
-            .publisher(for: UIDevice.batteryLevelDidChangeNotification)
+            .publisher(for: UIDevice.batteryLevelDidChangeNotification, object: nil)
             .compactMap { _ in
                 device.batteryLevel
             }
@@ -61,7 +61,7 @@ public final class DeviceServiceImpl: DeviceService {
             .store(in: &cancellables)
         
         notificationCenter
-            .publisher(for: UIDevice.batteryStateDidChangeNotification)
+            .publisher(for: UIDevice.batteryStateDidChangeNotification, object: nil)
             .compactMap { _ in
                 device.batteryState?.mapToBatteryState
             }
@@ -71,7 +71,7 @@ public final class DeviceServiceImpl: DeviceService {
             .store(in: &cancellables)
         
         notificationCenter
-            .publisher(for: Notification.Name.NSProcessInfoPowerStateDidChange)
+            .publisher(for: Notification.Name.NSProcessInfoPowerStateDidChange, object: nil)
             .map { _ in
                 processInformation.isLowPowerModeEnabled.mapToLowPowerMode
             }
@@ -81,7 +81,7 @@ public final class DeviceServiceImpl: DeviceService {
             .store(in: &cancellables)
         
         notificationCenter
-            .publisher(for: UIScreen.brightnessDidChangeNotification)
+            .publisher(for: UIScreen.brightnessDidChangeNotification, object: nil)
             .map { _ in
                 screen.screenBrightness
             }
@@ -240,14 +240,6 @@ extension Device.BatteryState {
         case .unplugged:
             return .unplugged
         }
-    }
-    
-}
-
-extension UIScreen {
-    
-    fileprivate var screenBrightness: Int {
-        Int(brightness * 100)
     }
     
 }
