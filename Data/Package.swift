@@ -27,6 +27,6 @@ let package = Package(
             dependencies: ["DeviceKit"]),
         .testTarget(
             name: "DataTests",
-            dependencies: ["DataLayer"]),
+            dependencies: ["DataLayer", "DeviceKit"]),
     ]
 )
