@@ -198,6 +198,8 @@ extension DeviceServiceImpl {
                 return .arm64
             #elseif arch(arm) || arch(arm64_32)
                 return .arm
+            #else
+                return .unknown
             #endif
         #else
             return .unknown
