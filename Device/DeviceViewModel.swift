@@ -21,17 +21,14 @@ final class DeviceViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    private let calendar: Calendar
     private let deviceService: DeviceService
     
     init(
-        calendar: Calendar = .current,
         deviceService: DeviceService = DeviceServiceImpl(
             processInformation: .processInfo,
             application: .shared
         )
     ) {
-        self.calendar = calendar
         self.deviceService = deviceService
         
         fetchData()
