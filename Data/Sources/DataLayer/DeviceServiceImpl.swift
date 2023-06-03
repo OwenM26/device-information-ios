@@ -202,6 +202,8 @@ extension DeviceServiceImpl {
         #else
             return .unknown
         #endif
+        
+        return .unknown
     }
     
     private func mapToThermalState(_ state: Device.ThermalState?) -> DeviceInformation.ThermalState {
