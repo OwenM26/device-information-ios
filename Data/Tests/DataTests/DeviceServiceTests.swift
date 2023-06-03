@@ -3,7 +3,7 @@ import DeviceKit
 import XCTest
 @testable import DataLayer
 
-final class ServiceServiceTest: XCTestCase {
+final class DataServiceTest: XCTestCase {
     
     private var mockDevice: MockDevice!
     private var mockNotificationCenter: MockDeviceNotificationCenter!
