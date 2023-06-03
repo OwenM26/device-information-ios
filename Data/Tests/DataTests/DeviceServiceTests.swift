@@ -37,14 +37,13 @@ final class ServiceServiceTest: XCTestCase {
     }
     
     func testBatteryLevelPublisher_ReceivesUpdates() {
-        let expectation = XCTestExpectation(description: "Should receive three values for the battery level: 0, 50, 100")
+        let expectation = XCTestExpectation(description: "Should receive four values for the battery level: nil (initial value), 0, 50, 100")
         expectation.expectedFulfillmentCount = 3
         
         var receivedValues = [Int?]()
 
         sut
             .batteryLevel()
-            .dropFirst()
             .sink {
                 receivedValues.append($0)
                 expectation.fulfill()
@@ -62,18 +61,17 @@ final class ServiceServiceTest: XCTestCase {
 
         wait(for: [expectation], timeout: 2)
 
-        XCTAssertEqual(receivedValues, [0, 50, 100])
+        XCTAssertEqual(receivedValues, [nil, 0, 50, 100])
     }
     
     func testBatteryStatePublisher_ReceivesUpdates() {
-        let expectation = XCTestExpectation(description: "Should receive three values for the battery state: discharging, charging, full")
+        let expectation = XCTestExpectation(description: "Should receive three values for the battery state: none (initial value), discharging, charging, full")
         expectation.expectedFulfillmentCount = 3
         
         var receivedValues = [BatteryState]()
 
         sut
             .batteryState()
-            .dropFirst()
             .sink {
                 receivedValues.append($0)
                 expectation.fulfill()
@@ -91,7 +89,7 @@ final class ServiceServiceTest: XCTestCase {
 
         wait(for: [expectation], timeout: 2)
 
-        XCTAssertEqual(receivedValues, [.unplugged, .charging, .full])
+        XCTAssertEqual(receivedValues, [.none, .unplugged, .charging, .full])
     }
     
     func testScreenBrightnessPublisher_ReceivesUpdates() {
