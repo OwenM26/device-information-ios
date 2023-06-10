@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct DeviceView: View {
     
@@ -106,13 +107,35 @@ struct DeviceView: View {
     var diskView: some View {
         Section("device.section.storage") {
             if let deviceInformation = viewModel.deviceSupport {
-                ProgressView(value: Double(deviceInformation.disk.usedSpaceRaw), total: Double(deviceInformation.disk.totalSpaceRaw)) {
-                    HStack {
-                        Text(deviceInformation.disk.percentageUsedFormatted)
-                            .padding(.vertical, 5)
+                Chart(deviceInformation.disk.chartData, id: \.name) { element in
+                    SectorMark(
+                        angle: .value("Space", element.value),
+                        innerRadius: .ratio(0.75),
+                        angularInset: 1.5
+                    )
+                    .cornerRadius(6)
+                    .foregroundStyle(by: .value("Name", element.localizedName))
+                }
+                .chartForegroundStyleScale([
+                    deviceInformation.disk.chartData[0].localizedName: Color.blue,
+                    deviceInformation.disk.chartData[1].localizedName: Color.gray
+                ])
+                .chartLegend(spacing: 15)
+                .frame(height: 220)
+                .chartBackground { chartProxy in
+                    GeometryReader { geometry in
+                        let frame = geometry[chartProxy.plotAreaFrame]
+                        VStack {
+                            Text("device.section.storage.freeSpace")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                            Text(deviceInformation.disk.freeSpace)
+                                .font(.title2.bold())
+                                .foregroundColor(.primary)
+                        }
+                        .position(x: frame.midX, y: frame.midY)
                     }
                 }
-                .padding(.bottom, 10)
                 
                 LabeledContent("device.section.storage.totalSpace", value: deviceInformation.disk.totalSpace)
                 LabeledContent("device.section.storage.usedSpace", value: deviceInformation.disk.usedSpace)
