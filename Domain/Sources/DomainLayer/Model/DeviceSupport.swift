@@ -114,12 +114,31 @@ public struct DeviceSupport {
     }
     
     public struct Disk {
+        
+        public struct ChartData {
+            public let name: String
+            public let value: Int64
+            
+            public init(
+                name: String,
+                value: Int64
+            ) {
+                self.name = name
+                self.value = value
+            }
+            
+            public var localizedName: String {
+                NSLocalizedString(name, comment: "")
+            }
+        }
+        
         public let totalSpace: String
         public let usedSpace: String
         public let freeSpace: String
         public let totalSpaceRaw: Int64
         public let usedSpaceRaw: Int64
         public let freeSpaceRaw: Int64
+        public let chartData: [ChartData]
         
         public init(
             totalSpace: String,
@@ -127,7 +146,8 @@ public struct DeviceSupport {
             freeSpace: String,
             totalSpaceRaw: Int64,
             usedSpaceRaw: Int64,
-            freeSpaceRaw: Int64
+            freeSpaceRaw: Int64,
+            chartData: [ChartData]
         ) {
             self.totalSpace = totalSpace
             self.usedSpace = usedSpace
@@ -135,6 +155,7 @@ public struct DeviceSupport {
             self.totalSpaceRaw = totalSpaceRaw
             self.usedSpaceRaw = usedSpaceRaw
             self.freeSpaceRaw = freeSpaceRaw
+            self.chartData = chartData
         }
         
         public var percentageUsedFormatted: String {
