@@ -108,7 +108,11 @@ final class DeviceViewModel: ObservableObject {
                         freeSpace: $0.disk.freeSpace,
                         totalSpaceRaw: $0.disk.totalSpaceRaw,
                         usedSpaceRaw: $0.disk.usedSpaceRaw,
-                        freeSpaceRaw: $0.disk.freeSpaceRaw
+                        freeSpaceRaw: $0.disk.freeSpaceRaw,
+                        chartData: self.mapToDiskChartData(
+                            freeSpaceRaw: $0.disk.freeSpaceRaw,
+                            usedSpaceRaw: $0.disk.usedSpaceRaw
+                        )
                     )
                 )
             }
@@ -232,6 +236,22 @@ extension DeviceViewModel {
         case .off:
             return .off
         }
+    }
+    
+    private func mapToDiskChartData(
+        freeSpaceRaw: Int64,
+        usedSpaceRaw: Int64
+    ) -> [DomainLayer.DeviceSupport.Disk.ChartData] {
+        [
+            .init(
+                name: "device.section.storage.usedSpace",
+                value: usedSpaceRaw
+            ),
+            .init(
+                name: "device.section.storage.freeSpace",
+                value: freeSpaceRaw
+            )
+        ]
     }
     
 }
